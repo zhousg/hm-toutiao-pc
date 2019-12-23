@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    APP COM  <el-button type="success">成功按钮</el-button>
+    <!-- 一级路由组件显示位置 -->
+    <router-view></router-view>
   </div>
 </template>
 
