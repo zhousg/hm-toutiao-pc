@@ -8,6 +8,10 @@ import 'element-ui/lib/theme-chalk/index.css'
 // 2.1 vue-cli提供的一个绝对路径别名  src绝对路径
 import router from '@/router'
 
+// 简单使用axios
+import axios from 'axios'
+Vue.prototype.$http = axios
+
 Vue.use(ElementUI)
 // 日志的详细与否，生产环境  开发环境
 Vue.config.productionTip = false
