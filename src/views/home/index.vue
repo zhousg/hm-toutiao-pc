@@ -48,15 +48,15 @@
         <span @click="toggleAside" class="el-icon-s-fold icon"></span>
         <span class="text">江苏传智播客科技教育有限公司</span>
         <!-- 下拉菜单 -->
-        <el-dropdown class="my-dropdown">
+        <el-dropdown class="my-dropdown" @command="handler">
           <span class="el-dropdown-link">
-            <img class="user-icon" src="../../assets/avatar.jpg" alt />
-            <span class="user-name">用户名称</span>
+            <img class="user-icon" :src="photo" alt />
+            <span class="user-name">{{name}}</span>
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item icon="el-icon-setting">个人设置</el-dropdown-item>
-            <el-dropdown-item icon="el-icon-unlock">退出登录</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-setting" command="setting">个人设置</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-unlock" command="logout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </el-header>
@@ -69,18 +69,53 @@
 </template>
 
 <script>
+import store from '@/store'
 export default {
   data () {
     return {
       // 表示左菜单是展开还是收起
-      isOpen: true
+      isOpen: true,
+      // 用户名称
+      name: '',
+      // 用户头像
+      photo: ''
     }
+  },
+  created () {
+    // 从本地获取用户信息
+    const user = store.getUser()
+    this.name = user.name
+    this.photo = user.photo
   },
   methods: {
     toggleAside () {
       // 切换左菜单
       // 宽度  logo  导航菜单组件
       this.isOpen = !this.isOpen
+    },
+    // 1. 使用组件注意：绑定原生事件的时候注意组件是否支持了这个事件。
+    // 2. 请参考 element-ui 的说明文档
+    // 3. 但是组件解析后的html元素是支持click事件的
+    // 4. 在绑定事件的时候  使用事件修饰符  .native 原生
+
+    // 去个人设置
+    setting () {
+      this.$router.push('/setting')
+    },
+    // 去退出登录
+    logout () {
+      store.delUser()
+      this.$router.push('/login')
+    },
+    // 处理指令函数
+    handler (command) {
+      // command 值  setting|logout
+      // 如果是 setting  跳转去个人设置  如果是logout  清楚用户信息跳转去登录
+      // if (command === 'setting')
+      // if (command === 'logout')
+      // 如果指令是setting调用的是this.setting() this['setting']()
+      // 如果指令是logout调用的是this.logout() this['logout']()
+      this[command]()
     }
   }
 }
