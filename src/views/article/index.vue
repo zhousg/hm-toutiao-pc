@@ -46,11 +46,23 @@
       </el-form>
     </el-card>
     <!-- 筛选结果区域 -->
+
+    <!-- 测试代码 -->
+    <my-page>
+      <!-- slot 指定插槽名称 -->
+      <!-- slot-scope 指定接收插槽上所有数据的对象名称 {msg:'',age:''}-->
+      <!-- scope 变量意义：当前插槽的作用域数据 -->
+      <!-- <div slot="content" slot-scope="scope">内容1---{{scope.msg}}</div> -->
+      <template v-slot:content="scope">内容1---{{scope.msg}}</template>
+      <div slot="footer">底部1</div>
+    </my-page>
   </div>
 </template>
 
 <script>
+import MyPage from '@/test/my-page'
 export default {
+  components: { MyPage },
   data () {
     return {
       // 筛选条件对象
