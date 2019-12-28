@@ -7,11 +7,14 @@ import 'element-ui/lib/theme-chalk/index.css'
 // 1.3 index.js index.vue index.json 支持三种格式，优先级和我书写的顺序一致
 // 2.1 vue-cli提供的一个绝对路径别名  src绝对路径
 import router from '@/router'
-
 // 简单使用axios
 import axios from '@/api'
-Vue.prototype.$http = axios
 
+// 使用自己的插件
+import plugin from '@/plugin'
+Vue.use(plugin)
+
+Vue.prototype.$http = axios
 Vue.use(ElementUI)
 // 日志的详细与否，生产环境  开发环境
 Vue.config.productionTip = false

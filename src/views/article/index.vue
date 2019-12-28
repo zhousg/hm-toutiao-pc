@@ -4,10 +4,8 @@
     <el-card class="box-card">
       <!-- 头部区域 面包屑  -->
       <div slot="header" class="clearfix">
-        <el-breadcrumb separator-class="el-icon-arrow-right">
-          <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item>内容管理</el-breadcrumb-item>
-        </el-breadcrumb>
+        <!-- 使用自己面包屑组件 -->
+        <my-bread>内容管理</my-bread>
       </div>
       <!-- 内容区域 表单 -->
       <el-form label-width="80px" size="small">
@@ -46,23 +44,11 @@
       </el-form>
     </el-card>
     <!-- 筛选结果区域 -->
-
-    <!-- 测试代码 -->
-    <my-page>
-      <!-- slot 指定插槽名称 -->
-      <!-- slot-scope 指定接收插槽上所有数据的对象名称 {msg:'',age:''}-->
-      <!-- scope 变量意义：当前插槽的作用域数据 -->
-      <!-- <div slot="content" slot-scope="scope">内容1---{{scope.msg}}</div> -->
-      <template v-slot:content="scope">内容1---{{scope.msg}}</template>
-      <div slot="footer">底部1</div>
-    </my-page>
   </div>
 </template>
 
 <script>
-import MyPage from '@/test/my-page'
 export default {
-  components: { MyPage },
   data () {
     return {
       // 筛选条件对象
