@@ -72,9 +72,9 @@
         </el-table-column>
         <el-table-column label="发布时间" prop="pubdate"></el-table-column>
         <el-table-column label="操作" width="120px">
-          <template>
-            <el-button plain type="primary" icon="el-icon-edit" circle></el-button>
-            <el-button plain type="danger" icon="el-icon-delete" circle></el-button>
+          <template slot-scope="scope">
+            <el-button @click="toEdit(scope.row.id)" plain type="primary" icon="el-icon-edit" circle></el-button>
+            <el-button @click="delArticle(scope.row.id)" plain type="danger" icon="el-icon-delete" circle></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -121,6 +121,22 @@ export default {
     this.getArticles()
   },
   methods: {
+    // 编辑文章
+    toEdit (articleId) {
+      this.$router.push(`/publish?id=${articleId}`)
+    },
+    // 删除文章
+    async delArticle (articleId) {
+      // 发生删除请求
+      try {
+        await this.$http.delete(`articles/${articleId}`)
+        this.$message.success('删除成功')
+        this.getArticles()
+      } catch (e) {
+        console.log(e)
+        this.$message.error('删除失败')
+      }
+    },
     // 获取频道的选项数据
     async getChannelOptions () {
       // 原始数据 res = {data: {message:'',data: {channels:[]}}}
@@ -138,7 +154,7 @@ export default {
         data: { data }
       } = await this.$http.get('articles', { params: this.filterParams })
       this.articles = data.results
-      console.log(this.articles[0].id.toString())
+      // console.log(this.articles[0].id.toString())
       // 总条数
       this.total = data.total_count
     },

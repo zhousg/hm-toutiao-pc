@@ -11,7 +11,12 @@ axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0/'
 // axios.defaults.headers.Authorization = `Bearer ${store.getUser().token}`
 axios.defaults.transformResponse = [(data) => {
   // data json格式的字符串
-  return JSONBIGINT.parse(data)
+  // 当后端没有响应的时候  转换会报错  捕获这个错误  处理：不去转换直接返回
+  try {
+    return JSONBIGINT.parse(data)
+  } catch (e) {
+    return data
+  }
 }]
 
 // 2. 请求拦截器
@@ -26,7 +31,7 @@ axios.interceptors.response.use(res => res, err => {
   // 根据当前的响应状态码是不是401去跳转登录页面
   // err 对象包含 错误的时候响应对象 err.response
   // 状态码  err.response.status 就是
-  if (err.response.status === 401) {
+  if (err.response && err.response.status === 401) {
     // 如果是vue组件中：this.$router.push('/login')  路由实例$router提供push函数
     // 如果在js模块中：导入创建好的实例对象调用push函数即可
     router.push('/login')
