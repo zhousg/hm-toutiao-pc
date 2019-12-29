@@ -1,8 +1,5 @@
 <template>
   <div class="container-article">
-    <!-- 测试代码 -->
-    <com-child @childtoparent="fn($event)"></com-child>
-
     <!-- 筛选条件区域 -->
     <el-card class="box-card">
       <!-- 头部区域 面包屑  -->
@@ -23,14 +20,9 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="频道：">
-          <el-select v-model="filterParams.channel_id" @change="changeChannel" clearable placeholder="请选择">
-            <el-option
-              v-for="item in channelOptions"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
+          <!-- 自己的频道组件 -->
+          <!-- <my-channel :value="filterParams.channel_id" @input="filterParams.channel_id=$event"></my-channel> -->
+          <my-channel v-model="filterParams.channel_id"></my-channel>
         </el-form-item>
         <el-form-item label="日期：">
           <el-date-picker
@@ -96,9 +88,7 @@
 </template>
 
 <script>
-import ComChild from '@/test/com-child'
 export default {
-  components: { ComChild },
   data () {
     return {
       // 筛选条件对象
@@ -111,8 +101,8 @@ export default {
         page: 1,
         per_page: 20
       },
-      // 频道选项
-      channelOptions: [],
+      // // 频道选项
+      // channelOptions: [],
       // 日期选择后的数组[起始日期,结束日期]
       dateArr: [],
       // 文章列表
@@ -122,13 +112,10 @@ export default {
     }
   },
   created () {
-    this.getChannelOptions()
+    // this.getChannelOptions()
     this.getArticles()
   },
   methods: {
-    fn (data) {
-      console.log('自定义事件触发了', data)
-    },
     // 编辑文章
     toEdit (articleId) {
       this.$router.push(`/publish?id=${articleId}`)
@@ -145,15 +132,15 @@ export default {
         this.$message.error('删除失败')
       }
     },
-    // 获取频道的选项数据
-    async getChannelOptions () {
-      // 原始数据 res = {data: {message:'',data: {channels:[]}}}
-      // 按照 结构 去解构赋值。
-      const {
-        data: { data }
-      } = await this.$http.get('channels')
-      this.channelOptions = data.channels
-    },
+    // // 获取频道的选项数据
+    // async getChannelOptions () {
+    //   // 原始数据 res = {data: {message:'',data: {channels:[]}}}
+    //   // 按照 结构 去解构赋值。
+    //   const {
+    //     data: { data }
+    //   } = await this.$http.get('channels')
+    //   this.channelOptions = data.channels
+    // },
     // 获取文章列表数据
     async getArticles () {
       // 如果是post传参  放到请求主体提交body  axios.post(url, 请求体传参)
@@ -188,11 +175,11 @@ export default {
         this.filterParams.begin_pubdate = null
         this.filterParams.end_pubdate = null
       }
-    },
-    // 频道选择处理函数
-    changeChannel () {
-      if (this.filterParams.channel_id === '') this.filterParams.channel_id = null
     }
+    // // 频道选择处理函数
+    // changeChannel () {
+    //   if (this.filterParams.channel_id === '') this.filterParams.channel_id = null
+    // }
   }
 }
 </script>
