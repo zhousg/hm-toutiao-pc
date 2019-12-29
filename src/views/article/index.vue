@@ -1,5 +1,8 @@
 <template>
   <div class="container-article">
+    <!-- 测试代码 -->
+    <com-child @childtoparent="fn($event)"></com-child>
+
     <!-- 筛选条件区域 -->
     <el-card class="box-card">
       <!-- 头部区域 面包屑  -->
@@ -93,7 +96,9 @@
 </template>
 
 <script>
+import ComChild from '@/test/com-child'
 export default {
+  components: { ComChild },
   data () {
     return {
       // 筛选条件对象
@@ -121,6 +126,9 @@ export default {
     this.getArticles()
   },
   methods: {
+    fn (data) {
+      console.log('自定义事件触发了', data)
+    },
     // 编辑文章
     toEdit (articleId) {
       this.$router.push(`/publish?id=${articleId}`)
