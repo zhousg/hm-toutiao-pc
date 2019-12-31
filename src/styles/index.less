@@ -24,3 +24,17 @@
   height: 178px;
   display: block;
 }
+
+// 覆盖富文本样式
+// 为何要加前缀选择器，提高选择器的优先级，让以下样式仅仅在发布文章组件下生效。
+.container-publish .ql-editor{
+  height: 300px;
+}
+.container-publish .ql-toolbar.ql-snow{
+  padding: 0 8px;
+}
+
+// 覆盖对话框样式
+.my-image .el-dialog__body{
+  padding-bottom: 0;
+}
