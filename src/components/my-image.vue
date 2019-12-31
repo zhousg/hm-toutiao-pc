@@ -2,7 +2,8 @@
   <div class="my-image">
     <!-- 图片按钮 -->
     <div class="img_btn" @click="openDialog">
-      <img src="../assets/default.png" alt />
+      <!-- ../assets/default.png 默认图地址 -->
+      <img :src="value||defaultImage" alt />
     </div>
     <!-- 对话框 -->
     <el-dialog :visible.sync="dialogVisible" width="700px">
@@ -53,7 +54,7 @@
       </el-tabs>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="confirmImage">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -61,8 +62,10 @@
 
 <script>
 import store from '@/store'
+import defaultImage from '../assets/default.png'
 export default {
   name: 'my-image',
+  props: ['value'],
   data () {
     return {
       // 控制对话框显示隐藏
@@ -86,10 +89,34 @@ export default {
         Authorization: `Bearer ${store.getUser().token}`
       },
       // 上传的图片地址
-      uploadImageUrl: null
+      uploadImageUrl: null,
+      // 确认的图片地址
+      // confirmImageUrl: defaultImage,
+      // 默认图
+      defaultImage
     }
   },
   methods: {
+    // 确认图片
+    confirmImage () {
+      if (this.activeName === 'image') {
+        // 素材库
+        if (!this.selectedImageUrl) return this.$message.warning('请选择一张素材图片')
+        // 按钮位置显示图片
+        // this.confirmImageUrl = this.selectedImageUrl
+        // 把图片提交给父组件
+        this.$emit('input', this.selectedImageUrl)
+      } else {
+        // 上传图片
+        if (!this.uploadImageUrl) return this.$message.warning('请上传一张素材图片')
+        // 按钮位置显示图片
+        // this.confirmImageUrl = this.uploadImageUrl
+        // 把图片提交给父组件
+        this.$emit('input', this.uploadImageUrl)
+      }
+      // 关闭对话框
+      this.dialogVisible = false
+    },
     // 上传成功
     uploadSuccess (res) {
       this.uploadImageUrl = res.data.url
@@ -102,6 +129,12 @@ export default {
     openDialog () {
       this.dialogVisible = true
       this.getImages()
+      // - 清空选择的图片
+      this.selectedImageUrl = null
+      // - 清空上次的图片
+      this.uploadImageUrl = null
+      // - 默认选中tab是  素材库
+      this.activeName = 'image'
     },
     // 出来切换 全部与收藏
     changeCollect () {
